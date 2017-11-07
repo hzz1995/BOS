@@ -34,6 +34,13 @@
 					idField : 'id',
 					columns : columns
 				});
+				$("#save").click(function(){
+					if($("#standardForm").form("validate")){
+						$("#standardForm").submit();	
+					} else {
+						$.messager.alert("警告","你输入的数据不合法！","warning");
+					}
+				});
 			});	
 			
 			//工具栏
@@ -42,7 +49,7 @@
 				text : '增加',
 				iconCls : 'icon-add',
 				handler : function(){
-					alert('增加');
+					$("#standardWindow").window('open'); 
 				}
 			}, {
 				id : 'button-edit',
@@ -98,6 +105,8 @@
 				width : 120,
 				align : 'center'
 			} ] ];
+			
+			
 		</script>
 	</head>
 
@@ -115,7 +124,7 @@
 
 			<div region="center" style="overflow:auto;padding:5px;" border="false">
 				
-				<form>
+				<form id="standardForm" action="../../standard_save.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">收派标准信息
