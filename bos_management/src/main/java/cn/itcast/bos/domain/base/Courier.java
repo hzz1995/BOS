@@ -12,6 +12,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.struts2.json.annotations.JSON;
+
 /**
  * @description:快递员
  */
@@ -52,6 +54,7 @@ public class Courier {
 	@JoinColumn(name = "C_TAKETIME_ID")
 	private TakeTime takeTime;
 
+		
 	@ManyToMany(mappedBy = "couriers")
 	private Set<FixedArea> fixedAreas = new HashSet<FixedArea>();
 
@@ -64,13 +67,15 @@ public class Courier {
 	}
 
 	public String getCourierNum() {
+		
 		return courierNum;
 	}
-
 	public void setCourierNum(String courierNum) {
 		this.courierNum = courierNum;
 	}
-
+	
+	
+	
 	public String getName() {
 		return name;
 	}
@@ -135,6 +140,7 @@ public class Courier {
 		this.vehicleNum = vehicleNum;
 	}
 
+	@JSON(serialize=false)
 	public Set<FixedArea> getFixedAreas() {
 		return fixedAreas;
 	}
@@ -166,4 +172,5 @@ public class Courier {
 	public void setStandard(Standard standard) {
 		this.standard = standard;
 	}
+
 }

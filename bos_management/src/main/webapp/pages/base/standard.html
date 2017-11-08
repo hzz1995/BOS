@@ -30,7 +30,7 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/standard.json",
+					url : "../../standard_pageFind.action",
 					idField : 'id',
 					columns : columns
 				});
@@ -56,7 +56,16 @@
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function(){
-					alert('修改');
+					var rows = $("#grid").datagrid('getSelections');
+					if(rows.length !=1) {
+						//选择了多行或者是没有选择
+						$.messager.alert("提示信息","你的选择则有误，只能对一条记录进行修改","warning");
+					} else {
+						var row = rows[0];
+						$("#standardForm").form("load",row);
+						$("#standardWindow").window('open');
+					}
+					
 				}
 			}];
 			

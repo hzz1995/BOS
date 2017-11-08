@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +17,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "T_STANDARD")
+@NamedQueries({@NamedQuery(name="Standard.query1",query="from Standard where name=?")})
 public class Standard {
 	@Id
 	@GeneratedValue
