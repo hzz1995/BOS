@@ -14,6 +14,7 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.portal.js"></script>
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+		<script src="../../js/jquery.ocupload-1.1.2.js"></script>
 		<script type="text/javascript">
 			function doAdd(){
 				$('#addWindow').window("open");
@@ -113,6 +114,23 @@
 			        closed: true,
 			        height: 400,
 			        resizable:false
+			    });
+			    $("#button-import").upload({
+			    	action　: "../../importBatch.action",
+			    	onSelect : function() {
+			    		//选中文件后，关闭自动提交按钮
+			    		this.autoSubmit = false;
+			    		var filename = this.filename();
+			    		var regex = /^.*\.(xls|xlsx)$/;
+			    		if(regex.test(filename)) {
+			    			this.submit();
+			    		} else {
+			    			$.messager.alert("警告","文件格式不正确","warning");
+			    		}
+			    	},
+			    	onComplete : function() {
+			    		$.messager.alert("提示","上传成功！","info");
+			    	}
 			    });
 				
 			});

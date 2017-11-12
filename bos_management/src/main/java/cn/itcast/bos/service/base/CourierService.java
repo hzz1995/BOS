@@ -25,5 +25,6 @@ public interface CourierService {
 	 * @return
 	 */
 	Page<Courier> findByPage(Specification<Courier> specification, Pageable pageable);
+	void updateBatch(String[] id);
 	
 }

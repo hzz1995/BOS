@@ -33,7 +33,7 @@ import com.opensymphony.xwork2.ModelDriven;
 import cn.itcast.bos.domain.base.Courier;
 import cn.itcast.bos.service.base.CourierService;
 
-@ParentPackage("json-default")
+@ParentPackage("json-default")  
 @Namespace(value="/")
 @Controller
 @Scope("prototype")
@@ -46,8 +46,18 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 	private static final long serialVersionUID = 1L;
 	
 	private Courier courier = new Courier();
+	//分页的当前页和当前页显示记录数
 	private int page;
 	private int rows;
+	//获取多个id
+	private String ids;
+	
+
+
+	@Override
+	public Courier getModel() {
+		return courier;
+	}
 	
 	public void setPage(int page) {
 		this.page = page;
@@ -57,10 +67,10 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 		this.rows = rows;
 	}
 
-	@Override
-	public Courier getModel() {
-		return courier;
-	}
+	public void setIds(String ids) {
+		this.ids = ids;
+	}	
+	
 	
 	@Autowired
 	private CourierService courierService;
@@ -72,16 +82,18 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 		return SUCCESS;
 	}
 	
-	
-	@Action(value="courier_Pagequery",results= {@Result(name="success",
+	/**
+	 * 带条件分页
+	 * @return
+	 */
+	@Action(value="courier_pageQuery",results= {@Result(name="success",
 			type="json")})
-	public String Pagequery() {
+	public String pageQuery() {
 		//条件查询
 		Specification<Courier> specification = new Specification<Courier>() {
 
 			@Override
 			public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-				
 				//多条件查询
 				List<Predicate> list = new ArrayList<>();
 				//单表查询
@@ -127,5 +139,13 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 		ActionContext.getContext().getValueStack().push(result);
 		return SUCCESS;
 	}
+	
+	@Action(value="courier_delBatch",results= {@Result(name="success",type="redirect",location="./pages/base/courier.html")})
+	public String delBatch() {
+		String[] id = ids.split(",");
+		courierService.updateBatch(id);
+		return SUCCESS;
+	}
+	
 	
 }

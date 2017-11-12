@@ -30,5 +30,13 @@ public class CourierServiceImpl implements CourierService {
 		Page<Courier> all = courierDao.findAll(specification,pageable);
 		return all;
 	}
+
+	@Override
+	public void updateBatch(String[] id) {
+		for (String string : id) {
+			Integer id_a = Integer.parseInt(string);
+			courierDao.updateDel(id_a);
+		}
+	}
 	
 }
