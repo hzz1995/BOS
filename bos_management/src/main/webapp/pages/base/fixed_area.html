@@ -15,6 +15,24 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript">
+			/*将序列化的对象转换成json对象。*/
+			$.fn.serializeJson=function(){
+            	var serializeObj={};  
+	            var array=this.serializeArray();    
+	            var str=this.serialize();  
+	            $(array).each(function(){  
+	                if(serializeObj[this.name]){  
+	                    if($.isArray(serializeObj[this.name])){  
+	                        serializeObj[this.name].push(this.value);  
+	                    }else{  
+	                        serializeObj[this.name]=[serializeObj[this.name],this.value];  
+	                    }  
+	                }else{  
+	                    serializeObj[this.name]=this.value;   
+	                }  
+	            });  
+	            return serializeObj;  
+        	}; 
 			function doAdd(){
 				$('#addWindow').window("open");
 			}
@@ -129,7 +147,7 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/fixed_area.json",
+					url : "../../fixedAarea_pageQuery.action",
 					idField : 'id',
 					columns : columns,
 					onDblClickRow : doDblClickRow
@@ -157,8 +175,20 @@
 			        resizable:false
 			    });
 				$("#btn").click(function(){
-					alert("执行查询...");
+						var params = $("#searchForm").serializeJson();
+						$("#grid").datagrid('load',params);
+						$("#searchWindow").window('close');
 				});
+				
+				$("#save").click(function() {
+					if($("#fixed_Area_addForm").form('validate')) {
+						$("#fixed_Area_addForm").form('submit');
+						$("#addWindow").window('close');
+					} else {
+						$.messager.alert("警告","数据不合法","warning")
+					}
+					
+				})
 				
 			});
 		
@@ -339,7 +369,7 @@
 			</div>
 
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="fixed_Area_addForm" action="../../fixedArea_save.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">定区信息</td>
@@ -353,7 +383,7 @@
 						<tr>
 							<td>定区名称</td>
 							<td>
-								<input type="text" name="name" class="easyui-validatebox" required="true" />
+								<input type="text" name="fixedAreaName" class="easyui-validatebox" required="true" />
 							</td>
 						</tr>
 						<tr>
@@ -381,7 +411,7 @@
 		<!-- 查询定区 -->
 		<div class="easyui-window" title="查询定区窗口" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="top:20px;left:200px">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form>
+				<form id="searchForm">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">查询条件</td>
@@ -389,21 +419,21 @@
 						<tr>
 							<td>定区编码</td>
 							<td>
-								<input type="text" name="id" class="easyui-validatebox" required="true" />
+								<input type="text" name="id" class="easyui-textbox" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>所属单位</td>
 							<td>
-								<input type="text" name="company" class="easyui-validatebox" required="true" />
+								<input type="text" name="company" class="easyui-textbox" required="true" />
 							</td>
 						</tr>
-						<tr>
+						<!--<tr>
 							<td>分区</td>
 							<td>
 								<input type="text" name="subareaName" class="easyui-validatebox" required="true" />
 							</td>
-						</tr>
+						</tr>-->
 						<tr>
 							<td colspan="2"><a id="btn" href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a> </td>
 						</tr>

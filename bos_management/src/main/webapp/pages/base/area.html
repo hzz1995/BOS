@@ -16,6 +16,24 @@
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script src="../../js/jquery.ocupload-1.1.2.js"></script>
 		<script type="text/javascript">
+			/*将序列化的对象转换成json对象。*/
+			$.fn.serializeJson=function(){
+            	var serializeObj={};  
+	            var array=this.serializeArray();    
+	            var str=this.serialize();  
+	            $(array).each(function(){  
+	                if(serializeObj[this.name]){  
+	                    if($.isArray(serializeObj[this.name])){  
+	                        serializeObj[this.name].push(this.value);  
+	                    }else{  
+	                        serializeObj[this.name]=[serializeObj[this.name],this.value];  
+	                    }  
+	                }else{  
+	                    serializeObj[this.name]=this.value;   
+	                }  
+	            });  
+	            return serializeObj;  
+        	}; 
 			function doAdd(){
 				$('#addWindow').window("open");
 			}
@@ -48,6 +66,13 @@
 				id : 'button-import',
 				text : '导入',
 				iconCls : 'icon-redo'
+			}, {
+				id : 'button-search',
+				text : '查找',
+				iconCls : 'icon-search',
+				handler : function() {
+					$("#searchWindow").window('open');
+				}
 			}];
 			// 定义列
 			var columns = [ [ {
@@ -99,7 +124,7 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/area.json",
+					url : "../../area_pageQuery.action",
 					idField : 'id',
 					columns : columns,
 					onDblClickRow : doDblClickRow
@@ -115,8 +140,9 @@
 			        height: 400,
 			        resizable:false
 			    });
+			    //文件上传
 			    $("#button-import").upload({
-			    	action　: "../../importBatch.action",
+			    	action　: "../../area_importBatch.action",
 			    	onSelect : function() {
 			    		//选中文件后，关闭自动提交按钮
 			    		this.autoSubmit = false;
@@ -130,9 +156,15 @@
 			    	},
 			    	onComplete : function() {
 			    		$.messager.alert("提示","上传成功！","info");
+						$('#grid').datagrid('load');
 			    	}
 			    });
-				
+				//打开查询窗口
+				$("#searchBtn").click(function() {
+					var param = $("#searchForm").serializeJson();
+					$("#grid").datagrid('load',param);
+					$("#searchWindow").window('close');
+				})
 			});
 		
 			function doDblClickRow(){
@@ -208,7 +240,7 @@
 		<!-- 查询区域-->
 		<div class="easyui-window" title="查询区域窗口" closed="true" id="searchWindow" collapsible="false" minimizable="false" maximizable="false" style="width: 400px; top:40px;left:200px">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="searchForm">
+				<form action="" id="searchForm" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="2">查询条件</td>

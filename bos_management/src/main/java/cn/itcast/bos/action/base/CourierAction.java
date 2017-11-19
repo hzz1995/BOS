@@ -1,9 +1,7 @@
 package cn.itcast.bos.action.base;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,47 +24,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 
-import com.opensymphony.xwork2.ActionContext;
-import com.opensymphony.xwork2.ActionSupport;
-import com.opensymphony.xwork2.ModelDriven;
-
 import cn.itcast.bos.domain.base.Courier;
 import cn.itcast.bos.service.base.CourierService;
 
 @ParentPackage("json-default")  
-@Namespace(value="/")
+@Namespace("/")
 @Controller
 @Scope("prototype")
 @Actions
-public class CourierAction extends ActionSupport implements ModelDriven<Courier>{
+public class CourierAction extends BaseAction<Courier>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private Courier courier = new Courier();
-	//分页的当前页和当前页显示记录数
-	private int page;
-	private int rows;
-	//获取多个id
 	private String ids;
 	
-
-
-	@Override
-	public Courier getModel() {
-		return courier;
-	}
-	
-	public void setPage(int page) {
-		this.page = page;
-	}
-
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-
 	public void setIds(String ids) {
 		this.ids = ids;
 	}	
@@ -78,7 +51,7 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 	@Action(value="courier_save",results= {@Result(name="success",
 			type="redirect",location="./pages/base/courier.html")})
 	public String save() {
-		courierService.save(courier);
+		courierService.save(model);
 		return SUCCESS;
 	}
 	
@@ -97,28 +70,28 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 				//多条件查询
 				List<Predicate> list = new ArrayList<>();
 				//单表查询
-				if(StringUtils.isNotBlank(courier.getCourierNum())) {
+				if(StringUtils.isNotBlank(model.getCourierNum())) {
 					//通过派送员工号去查找  类似与  where id = ?;
-					Predicate p1 = cb.equal(root.get("courierNum").as(String.class),courier.getCourierNum());
+					Predicate p1 = cb.equal(root.get("courierNum").as(String.class),model.getCourierNum());
 					list.add(p1);
 				}
-				if(courier.getStandard()!=null && StringUtils.isBlank(courier.getStandard().getName())) {
+				if(model.getStandard()!=null && StringUtils.isBlank(model.getStandard().getName())) {
 					//多表联合查询。 from standard and courier where standard.name like '%?%';
 					Join<Object,Object> StandardRoot = root.join("standard",JoinType.INNER);
 					Predicate p2 = cb.like(StandardRoot.get("name").as(String.class),"%" + 
-							courier.getStandard().getName() + "%");
+							model.getStandard().getName() + "%");
 					list.add(p2);
 				}
-				if(StringUtils.isNotBlank(courier.getCompany())) {
+				if(StringUtils.isNotBlank(model.getCompany())) {
 					//通过公司名称模糊查询 类似于 like '%?%';
 					Predicate p3 = cb.like(root.get("company").as(String.class),
-							       "%" + courier.getCompany() + "%");
+							       "%" + model.getCompany() + "%");
 					list.add(p3);
 				}
-				if(StringUtils.isNotBlank(courier.getType())) {
+				if(StringUtils.isNotBlank(model.getType())) {
 					//通过类型等值查询 类似于 where type = ?;
 					Predicate p4 = cb.equal(root.get("type").as(String.class),
-								   courier.getType());
+								   model.getType());
 					list.add(p4);
 				}
 				
@@ -132,11 +105,7 @@ public class CourierAction extends ActionSupport implements ModelDriven<Courier>
 		
 		Pageable pageable = new PageRequest(page-1,rows);
 		Page<Courier> page1 = courierService.findByPage(specification,pageable);
-		Map<String,Object> result = new HashMap<>();
-		result.put("total", page1.getNumberOfElements());
-		result.put("rows", page1.getContent());
-		
-		ActionContext.getContext().getValueStack().push(result);
+		pushPageDataToValueStack(page1);
 		return SUCCESS;
 	}
 	

@@ -3,9 +3,8 @@ package cn.itcast.bos.dao.base;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import cn.itcast.bos.domain.base.Area;
-import cn.itcast.bos.domain.base.Courier;
+import cn.itcast.bos.domain.base.FixedArea;
 
-public interface AreaDao extends JpaRepository<Area,String>,JpaSpecificationExecutor<Area> {
-
+public interface FixedAreaDao extends JpaRepository<FixedArea, String>,JpaSpecificationExecutor<FixedArea>{
+	
 }
