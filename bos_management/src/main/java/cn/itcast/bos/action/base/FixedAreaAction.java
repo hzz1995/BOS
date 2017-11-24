@@ -1,14 +1,18 @@
 package cn.itcast.bos.action.base;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -22,8 +26,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 
+import com.opensymphony.xwork2.ActionContext;
+
 import cn.itcast.bos.domain.base.FixedArea;
 import cn.itcast.bos.service.base.FixedAreaService;
+import cn.itcast.crm.domain.Customer;
 
 @ParentPackage("json-default")
 @Namespace("/")
@@ -38,13 +45,27 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 	@Autowired
 	private FixedAreaService fixedAreaService;
 	
+	private String[] customerIds;
 	
+	public void setCustomerIds(String[] customerIds) {
+		this.customerIds = customerIds;
+	}
+	
+	/**
+	 * 保存定区
+	 * @return
+	 */
 	@Action(value="fixedArea_save",results= {
-			@Result(name="success",location="../../pages/base/fixed_area.html")})
+			@Result(name="success",type="redirect",location="./pages/base/fixed_area.html")})
 	public String save() {
 		fixedAreaService.save(model);
 		return SUCCESS;
 	}
+	
+	/**
+	 * 通过条件和分页得到页面数据
+	 * @return
+	 */
 	@Action(value="fixedAarea_pageQuery",results= {@Result(name="success",type="json")})
 	public String pageQuery() {
 		Specification<FixedArea> specification = new Specification<FixedArea>() {
@@ -70,5 +91,36 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 		pushPageDataToValueStack(list);
 		return SUCCESS;
 	}
-
+	
+	
+	
+	@Action(value="fixedArea_findNoAssociationCustomers",
+			results= {@Result(name="success",type="json")})
+	public String findNoAssociationCustomers() {
+		Collection<? extends Customer> collection = WebClient.create("http://localhost:9998/crm_management/services/customerService/noassociationcustomers")
+				.accept(MediaType.APPLICATION_JSON).getCollection(Customer.class);
+		ActionContext.getContext().getValueStack().push(collection);
+		return SUCCESS;
+	}
+	
+	//查找已经关联的客户信息
+	@Action(value="fixedArea_findHasAssociationFixedAreaCustomers",
+			results= {@Result(name="success",type="json")})
+	public String findHasAssociationFixedAreaCustomers() {
+		Collection<? extends Customer> collection = WebClient
+				.create("http://localhost:9998/crm_management/services/customerService/associationfixedareacustomers/"+
+				model.getId()).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).getCollection(Customer.class);
+		ActionContext.getContext().getValueStack().push(collection);
+		return SUCCESS;
+	}
+    
+	@Action(value="fixedArea_associationCustomersToFixedArea",results= {
+					@Result(name="success",type="redirect",location="./pages/base/fixed_area.html")})
+	public String associationCustomersToFixedArea() {
+		//把数组拼接成字符串
+		String customerStr = StringUtils.join(customerIds, ",");
+		WebClient.create("http://localhost:9998/crm_management/services/customerService/associationcustomerstofixedarea?customerIds="
+				+customerStr + "&fixedAreaId=" + model.getId()).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).put(null);
+		return SUCCESS;
+	}
 }

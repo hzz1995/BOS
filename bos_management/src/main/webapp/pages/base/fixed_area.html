@@ -49,8 +49,48 @@
 				$('#searchWindow').window("open");
 			}
 			
+			
+			//打开关联客户窗口
 			function doAssociations(){
-				$('#customerWindow').window('open');
+				// 判断是否已经选中了一个定区，弹出关联客户窗口 
+				var rows = $("#grid").datagrid('getSelections');
+				if(rows.length==1){
+					// 只选择了一个定区
+					// 弹出定区关联客户窗口 
+					
+					$.messager.progress({
+						title : '进度条',
+						msg : '正在加载中',
+						interval :400
+					})
+					$("#customerFixedAreaId").val(rows[0].id);
+					
+					//未关联定区客户
+					$("#noassociationSelect").empty();
+					$.post("../../fixedArea_findNoAssociationCustomers.action",function(data) {
+						$(data).each(function(i,n) {
+							var options = $("<option value=" + n.id+">" +n.username+ "("+n.address+")</option>");
+							$("#noassociationSelect").append(options);
+						});
+						
+						$.messager.progress('close')
+						$('#customerWindow').window('open');
+					});
+					
+					//已经关联定区客户信息
+					$("#associationSelect").empty();
+					$.post("../../fixedArea_findHasAssociationFixedAreaCustomers.action",{"id":rows[0].id},function(data) {
+						$(data).each(function(i,n) {
+							
+							var options = $("<option value=" + n.id+">" +n.username+ "("+n.address+")</option>");
+							$("#associationSelect").append(options);
+						})
+					});
+				}else{
+					// 没有选中定区，或者选择 了多个定区
+					$.messager.alert("警告","关联客户,只能（必须）选择一个定区","warning");
+				}
+				
 			}
 			
 			//工具栏
@@ -174,22 +214,41 @@
 			        height: 400,
 			        resizable:false
 			    });
+			    
+			    //查询条件添加到datagrid上。
 				$("#btn").click(function(){
 						var params = $("#searchForm").serializeJson();
 						$("#grid").datagrid('load',params);
 						$("#searchWindow").window('close');
 				});
-				
+				//添加定区
 				$("#save").click(function() {
 					if($("#fixed_Area_addForm").form('validate')) {
 						$("#fixed_Area_addForm").form('submit');
+						$("#grid").datagrid('load');
 						$("#addWindow").window('close');
 					} else {
-						$.messager.alert("警告","数据不合法","warning")
+						$.messager.alert("警告","数据不合法","warning");
 					}
-					
-				})
+				});
 				
+				//左移
+				$("#toLeft").click(function() {
+					$("#noassociationSelect").append($("#associationSelect option:selected"));
+				});
+				
+				//右移
+				$("#toRight").click(function() {
+					$("#associationSelect").append($("#noassociationSelect option:selected"));
+				});
+				
+				//点击关联
+				$("#associationBtn").click(function(){
+					$("#associationSelect option").attr("selected","selected");
+					$("#customerForm").submit();
+					
+					$("#customerWindow").window('close');
+				});
 			});
 		
 			function doDblClickRow(){
@@ -350,7 +409,7 @@
 			<div id="tabs" fit="true" class="easyui-tabs">
 				<div title="关联快递员" id="courier" style="width:100%;height:100%;overflow:hidden">
 					<table id="association_courier"></table>
-				</div>
+				</div>	
 				<div title="关联分区" id="subArea" style="width:100%;height:100%;overflow:hidden">
 					<table id="association_subarea"></table>
 				</div>
@@ -445,7 +504,8 @@
 		<!-- 关联客户窗口 -->
 		<div class="easyui-window" title="关联客户窗口" id="customerWindow" collapsible="false" closed="true" minimizable="false" maximizable="false" style="top:20px;left:200px;width: 600px;height: 300px;">
 			<div style="overflow:auto;padding:5px;" border="false">
-				<form id="customerForm" action="../../decidedzone_assigncustomerstodecidedzone.action" method="post">
+				<form id="customerForm" 
+					action="../../fixedArea_associationCustomersToFixedArea.action" method="post">
 					<table class="table-edit" width="80%" align="center">
 						<tr class="title">
 							<td colspan="3">关联客户</td>
