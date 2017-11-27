@@ -12,7 +12,14 @@ import cn.itcast.bos.domain.base.FixedArea;
  *
  */
 public interface FixedAreaService {
-     void save(FixedArea model);
+    void save(FixedArea model);
 
 	Page<FixedArea> findAllByPage(Specification<FixedArea> specification, Pageable pageable);
+	/**
+	 * 实现了两个功能，定区关联快递员，快递员关联派送时间
+	 * @param model
+	 * @param courierId
+	 * @param takeTimeId
+	 */
+	void associationCourierToFixedArea(FixedArea model, Integer courierId, String takeTimeId);
 }

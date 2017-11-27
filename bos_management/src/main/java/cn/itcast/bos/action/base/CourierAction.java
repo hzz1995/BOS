@@ -24,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 
+import com.opensymphony.xwork2.ActionContext;
+
 import cn.itcast.bos.domain.base.Courier;
 import cn.itcast.bos.service.base.CourierService;
 
@@ -108,7 +110,7 @@ public class CourierAction extends BaseAction<Courier>{
 		pushPageDataToValueStack(page1);
 		return SUCCESS;
 	}
-	
+	//批量删除
 	@Action(value="courier_delBatch",results= {@Result(name="success",type="redirect",location="./pages/base/courier.html")})
 	public String delBatch() {
 		String[] id = ids.split(",");
@@ -116,5 +118,12 @@ public class CourierAction extends BaseAction<Courier>{
 		return SUCCESS;
 	}
 	
+	//查找是否与定区关联的快递员
+	@Action(value="courier_findnoassociation",results= {@Result(name="success",type="json")})
+	public String findnoassociation() {
+		List<Courier> list = courierService.findnoassociation();
+		ActionContext.getContext().getValueStack().push(list);
+		return SUCCESS;
+	}
 	
 }

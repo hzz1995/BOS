@@ -128,7 +128,8 @@
 					var rows = $("#grid").datagrid('getSelections');
 					if(rows.length==1){
 						// 只选择了一个定区
-						// 弹出定区关联快递员 窗口 
+						// 弹出定区关联快递员 窗口 并把定区id绑定到form表单中
+						$("#courierFixedAreaId").val(rows[0].id);
 						$("#courierWindow").window('open');
 					}else{
 						// 没有选中定区，或者选择 了多个定区
@@ -242,13 +243,37 @@
 					$("#associationSelect").append($("#noassociationSelect option:selected"));
 				});
 				
-				//点击关联
+				//点击关联客户按钮
 				$("#associationBtn").click(function(){
 					$("#associationSelect option").attr("selected","selected");
 					$("#customerForm").submit();
 					
 					$("#customerWindow").window('close');
 				});
+				
+				//快递员组合框
+				$('#courier_combox').combobox({ 
+					url:'../../courier_findnoassociation.action', 
+					valueField:'id', 
+					textField:'info' 
+				});
+				//派送时间组合框
+				$('#takeTime_combox').combobox({ 
+					url:'../../taketime_findAll.action', 
+					valueField:'id', 
+					textField:'name' 
+				});
+				
+				//点击关联快递员按钮
+				$("#associationCourierBtn").click(function() {
+					if($("#courierForm").form('validate')) {
+						$("#courierForm").submit();
+					} else {
+						$.messager.alert("警告","请选择合法数据！","warning");
+					}
+					
+				});
+
 			});
 		
 			function doDblClickRow(){
@@ -324,6 +349,7 @@
 						align : 'center'
 					} ] ]
 				});
+				
 				$('#association_customer').datagrid( {
 					fit : true,
 					border : true,
@@ -347,6 +373,8 @@
 						align : 'center'
 					}]]
 				});
+				
+				
 				$('#association_courier').datagrid({
 					fit : true,
 					border : true,
@@ -549,13 +577,13 @@
 							<td>
 								<!-- 存放定区编号 -->
 								<input type="hidden" name="id" id="courierFixedAreaId" />
-								<input type="text" name="courierId" class="easyui-combobox" required="true" />
+								<input type="text" id ="courier_combox" name="courierId" required="true" />
 							</td>
 						</tr>
 						<tr>
 							<td>选择收派时间</td>
 							<td>
-								<input type="text" name="takeTimeId" class="easyui-combobox" required="true" />
+								<input type="text" id="takeTime_combox" name="takeTimeId" required="true" />
 							</td>
 						</tr>
 						<tr>

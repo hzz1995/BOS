@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.bos.domain.base.FixedArea;
+import cn.itcast.bos.service.base.CourierService;
 import cn.itcast.bos.service.base.FixedAreaService;
 import cn.itcast.crm.domain.Customer;
 
@@ -44,13 +45,31 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private FixedAreaService fixedAreaService;
+	@Autowired
+	private CourierService courierService;
 	
 	private String[] customerIds;
+	
+	//快递员id
+	private Integer courierId;
+	//派送时间
+	private String takeTimeId;
+	
 	
 	public void setCustomerIds(String[] customerIds) {
 		this.customerIds = customerIds;
 	}
-	
+
+	public void setCourierId(Integer courierId) {
+		this.courierId = courierId;
+	}
+
+	public void setTakeTimeId(String takeTimeId) {
+		this.takeTimeId = takeTimeId;
+	}
+
+
+
 	/**
 	 * 保存定区
 	 * @return
@@ -121,6 +140,18 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 		String customerStr = StringUtils.join(customerIds, ",");
 		WebClient.create("http://localhost:9998/crm_management/services/customerService/associationcustomerstofixedarea?customerIds="
 				+customerStr + "&fixedAreaId=" + model.getId()).accept(MediaType.APPLICATION_JSON).type(MediaType.APPLICATION_JSON).put(null);
+		return SUCCESS;
+	}
+	
+	//关联快递员
+	@Action(value="fixedArea_associationCourierToFixedArea",results= {
+			@Result(name="success",type="redirect",location="./pages/base/fixed_area.html")})
+	public String associationCourierToFixedArea() {
+		//关联快递员和定区、关联快递员和派送时间
+		fixedAreaService.associationCourierToFixedArea(model,courierId,takeTimeId);
+		
+		
+		
 		return SUCCESS;
 	}
 }
