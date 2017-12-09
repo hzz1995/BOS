@@ -3,6 +3,10 @@ package cn.itcast.fore.action;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import javax.jms.JMSException;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.Session;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 
@@ -17,6 +21,8 @@ import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -52,6 +58,8 @@ public class CustomerAction extends BaseAction<Customer>{
 
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
+	@Autowired
+	private JmsTemplate jmsTemplate;
 	
 	@Action(value="customer_sendSms")
 	public String sendSms() {	
@@ -59,14 +67,18 @@ public class CustomerAction extends BaseAction<Customer>{
 		System.out.println("生成的手机信息验证码:" + code);
 		//将随机生成的验证码保存到session中
 		ActionContext.getContext().getSession().put("checkedcode", code);
-		//String msg = "尊敬的用户您好,本次获得的验证码为："+code + ",服务电话：4006184000";
-		//String result = SmsUtils.sendSmsByHTTP(model.getTelephone(), msg);
-			String result = "0001235s";//模拟数据
-			if(result.startsWith("000")) {
-				System.out.println("发送成功");
-			} else {
-				throw new RuntimeException("短信发送失败,信息码:" + result);
+		final String msg = "尊敬的用户您好,本次获得的验证码为："+code + ",服务电话：4006184000";
+		jmsTemplate.send("bos_sms", new MessageCreator() {
+		
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+					MapMessage mapMessage = session.createMapMessage();
+					mapMessage.setString("telephone", model.getTelephone());
+					mapMessage.setString("msg", msg);
+				return mapMessage;
 			}
+			
+		});
 		return NONE;
 	}
 	
