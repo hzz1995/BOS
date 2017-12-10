@@ -1,4 +1,0 @@
-127.0.0.1 - - [24/Nov/2017:21:55:32 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 85 http-bio-9998-exec-2 750
-127.0.0.1 - - [24/Nov/2017:21:55:32 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfd HTTP/1.1" 200 265 http-bio-9998-exec-1 750
-127.0.0.1 - - [24/Nov/2017:23:20:31 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfd HTTP/1.1" 200 265 http-bio-9998-exec-5 30
-127.0.0.1 - - [24/Nov/2017:23:20:31 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 85 http-bio-9998-exec-6 40

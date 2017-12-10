@@ -7,7 +7,6 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.Session;
-import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.RandomStringUtils;
@@ -19,6 +18,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
 import org.apache.struts2.convention.annotation.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.jms.core.JmsTemplate;
@@ -59,6 +59,7 @@ public class CustomerAction extends BaseAction<Customer>{
 	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 	@Autowired
+	@Qualifier("jmsQueueTemplate")
 	private JmsTemplate jmsTemplate;
 	
 	@Action(value="customer_sendSms")

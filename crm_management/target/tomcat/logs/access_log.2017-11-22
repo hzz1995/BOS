@@ -1,9 +1,0 @@
-127.0.0.1 - - [22/Nov/2017:19:47:55 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 25 http-bio-9998-exec-1 4916
-127.0.0.1 - - [22/Nov/2017:19:47:58 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfd HTTP/1.1" 200 346 http-bio-9998-exec-2 8049
-127.0.0.1 - - [22/Nov/2017:19:48:09 +0800] "PUT /crm_management/services/customerService/associationcustomerstofixedarea?customerIds=1,2,3&fixedAreaId=dfd HTTP/1.1" 204 - http-bio-9998-exec-5 184
-127.0.0.1 - - [22/Nov/2017:19:48:14 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 85 http-bio-9998-exec-8 27
-127.0.0.1 - - [22/Nov/2017:19:48:14 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfd HTTP/1.1" 200 265 http-bio-9998-exec-7 28
-127.0.0.1 - - [22/Nov/2017:19:48:18 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfe HTTP/1.1" 200 25 http-bio-9998-exec-10 9
-127.0.0.1 - - [22/Nov/2017:19:48:18 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 85 http-bio-9998-exec-9 9
-127.0.0.1 - - [22/Nov/2017:19:48:38 +0800] "GET /crm_management/services/customerService/noassociationcustomers HTTP/1.1" 200 85 http-bio-9998-exec-4 8
-127.0.0.1 - - [22/Nov/2017:19:48:38 +0800] "GET /crm_management/services/customerService/associationfixedareacustomers/dfd HTTP/1.1" 200 265 http-bio-9998-exec-3 11
