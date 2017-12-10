@@ -74,6 +74,15 @@
 					}
 				});
 				
+				$("#mm").menu({
+					onClick: function(Item) {
+						alert(Item.name);
+						if(Item.name=='Close') {
+							var tabs = $("#mytabs").tabs('tabs');
+						}
+					}
+				});
+				
 			});
 		</script>
 	</head>
@@ -101,8 +110,8 @@
 	
 		<!-- 菜单 初始化都是隐藏的-->
 		<div id="mm" class="easyui-menu" style="width:120px;">
-			<div>关闭当前窗口</div>
-			<div>关闭其它窗口</div>
+			<div data-options="name:'Close'">关闭当前窗口</div>
+			<div data-options="name:'Other'">关闭其它窗口</div>
 			<div class="menu-sep"></div>  <!-- 分隔线 -->
 			<div data-options="iconCls:'icon-cancel'">关闭全部窗口</div>
 		</div>
