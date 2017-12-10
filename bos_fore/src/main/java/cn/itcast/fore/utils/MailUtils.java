@@ -9,6 +9,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+
 public class MailUtils {
 	private static String smtp_host = "smtp.163.com";
 	private static String username = "15273386856@163.com";

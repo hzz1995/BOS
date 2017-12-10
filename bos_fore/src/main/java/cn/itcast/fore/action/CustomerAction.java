@@ -128,7 +128,7 @@ public class CustomerAction extends BaseAction<Customer>{
 			
 			if(customer.getType()== null || customer.getType() != 1) {
 				//没有绑定过，可以进行绑定
-				WebClient.create("http://loc	alhost:9998/crm_management/services/customerService/customer/updatetype/"
+				WebClient.create("http://localhost:9998/crm_management/services/customerService/customer/updatetype/"
 						+model.getTelephone()).get();
 				ServletActionContext.getResponse().getWriter().println("注册成功");
 			} else {

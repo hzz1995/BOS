@@ -253,9 +253,19 @@
 			<version>2.5.0</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.apache.xbean</groupId>
+		    <artifactId>xbean-spring</artifactId>
+		    <version>3.7</version>
+		</dependency>
+		<dependency>
 			<groupId>cn.itcast.maven</groupId>
 			<artifactId>crm_domain</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4</version>
 		</dependency>
 	</dependencies>
 
