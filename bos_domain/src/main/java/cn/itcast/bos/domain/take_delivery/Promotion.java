@@ -1,4 +1,4 @@
-package cn.itcast.bos.domain.base;
+package cn.itcast.bos.domain.take_delivery;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import cn.itcast.bos.domain.base.Contants;
 
 /**
  * @description:促销信息实体类
@@ -131,7 +133,10 @@ public class Promotion implements Serializable {
 	}
 
 	public String getDescription() {
-		return description;
+		if(description != null && description.contains(Contants.BOS_MANAGER_URI)) {
+			return description;
+		}
+		return description.replace("src=\"", "src=\"" + Contants.BOS_MANAGER_URI);
 	}
 
 	public void setDescription(String description) {
