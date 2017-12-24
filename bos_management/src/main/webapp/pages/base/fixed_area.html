@@ -213,7 +213,10 @@
 			        shadow: true,
 			        closed: true,
 			        height: 400,
-			        resizable:false
+			        resizable:false,
+			        onBeforeClose : function() {
+			        	$("#searchForm").form('reset');
+			        }
 			    });
 			    
 			    //查询条件添加到datagrid上。
@@ -261,7 +264,7 @@
 				$('#takeTime_combox').combobox({ 
 					url:'../../taketime_findAll.action', 
 					valueField:'id', 
-					textField:'name' 
+					textField:'name'
 				});
 				
 				//点击关联快递员按钮

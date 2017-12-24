@@ -103,7 +103,8 @@ public class SmsUtils {
 		try {
 			String soap = "";
 			soap = "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-					+ "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+					+ "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\""
+					+ " xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
 					+ "<soap:Body>" + "<SendMessages xmlns=\"http://tempuri.org/\">" + "<uid>" + userid + "</uid>"
 					+ "<pwd>" + pass + "</pwd>" + "<tos>" + mobiles + "</tos>" + "<msg>" + msg + "</msg>" + "<otime>"
 					+ time + "</otime>" + "</SendMessages>" + "</soap:Body>" + "</soap:Envelope>";

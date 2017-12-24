@@ -9,7 +9,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.cxf.jaxrs.client.WebClient;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Controller;
 import com.opensymphony.xwork2.ActionContext;
 
 import cn.itcast.bos.domain.base.FixedArea;
-import cn.itcast.bos.service.base.CourierService;
 import cn.itcast.bos.service.base.FixedAreaService;
 import cn.itcast.crm.domain.Customer;
 
@@ -45,8 +43,6 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private FixedAreaService fixedAreaService;
-	@Autowired
-	private CourierService courierService;
 	
 	private String[] customerIds;
 	
@@ -112,7 +108,10 @@ public class FixedAreaAction extends BaseAction<FixedArea> {
 	}
 	
 	
-	
+	/**
+	 * 查找没有关联定区的客户集合
+	 * @return
+	 */
 	@Action(value="fixedArea_findNoAssociationCustomers",
 			results= {@Result(name="success",type="json")})
 	public String findNoAssociationCustomers() {

@@ -45,10 +45,11 @@ public abstract class BaseAction<T> extends ActionSupport implements ModelDriven
 	
 	
 	public BaseAction() {
-		
 		Type superClass = this.getClass().getGenericSuperclass();
+		//BaseAction<Area>
 		ParameterizedType parameterizedType = (ParameterizedType)superClass;
 		@SuppressWarnings("unchecked")
+		//Area A B  Type 对象   --》  Class<T>
 		Class<T> modelClass = (Class<T>)parameterizedType.getActualTypeArguments()[0];
 		try {
 			model = modelClass.newInstance();

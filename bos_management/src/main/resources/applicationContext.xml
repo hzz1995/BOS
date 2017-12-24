@@ -18,7 +18,7 @@
 
 	<!-- 加载properties文件 -->
 	<context:property-placeholder location="classpath:config.properties" />	
-
+	
 	<!-- 数据库连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="jdbcUrl" value="${jdbc.url}" />
@@ -78,6 +78,11 @@
 	<!-- 注解管理事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 	
-	<!-- spring data注入,扫描到层包 -->
+	<!-- spring data注入,扫描dao层包 -->
 	<jpa:repositories base-package="cn.itcast.bos.dao"/>
+	
+	<import resource="applicationContext-webService.xml"/>
+	<import resource="applicationContext-quartz.xml"/>
+	<import resource="applicationContext-mq.xml"/>
+	
 </beans>

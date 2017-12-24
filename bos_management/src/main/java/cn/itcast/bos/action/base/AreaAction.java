@@ -56,6 +56,7 @@ public class AreaAction extends BaseAction<Area>{
 	public String importBatch() throws Exception {
 		System.out.println(file);
 		List<Area> list = new ArrayList<>();
+		
 		//创建一个excel对象
 		@SuppressWarnings("resource")
 		HSSFWorkbook hssfWorkbook = new HSSFWorkbook(new FileInputStream(file));
@@ -63,8 +64,10 @@ public class AreaAction extends BaseAction<Area>{
 		HSSFSheet createSheet = hssfWorkbook.getSheetAt(0);
 		
 	    //遍历每一行
+		int i = 0;
 		for (Row row : createSheet) {
-			// 一行数据 对应 一个区域对象
+			i++;
+			// 一行数据对应 一个区域对象
 			if (row.getRowNum() == 0) {
 				// 第一行 跳过
 				continue;
@@ -89,7 +92,7 @@ public class AreaAction extends BaseAction<Area>{
 			province = province.substring(0, province.length() - 1);
 			city = city.substring(0, city.length() - 1);
 			district = district.substring(0, district.length() - 1);
-		
+			
 			//得到简码
 			String[]city_code  = PinYin4jUtils.getHeadByString(province+city+district);
 			StringBuffer buffer = new StringBuffer();
@@ -103,7 +106,9 @@ public class AreaAction extends BaseAction<Area>{
 			String citycode = PinYin4jUtils.hanziToPinyin(city,"");
 			area.setCitycode(citycode);
 			list.add(area);
+			
 		}
+		System.out.println("执行次数：" + i);
 		areaService.save(list);
 		
 		

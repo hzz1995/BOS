@@ -20,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
 import cn.itcast.bos.action.base.BaseAction;
-import cn.itcast.bos.domain.base.Promotion;
+import cn.itcast.bos.domain.take_delivery.Promotion;
 import cn.itcast.bos.service.base.PromotionService;
 
 /**
@@ -107,5 +107,4 @@ public class ActivityAction extends BaseAction<Promotion> {
 		pushPageDataToValueStack(list);
 		return SUCCESS;
 	}
-	
 }

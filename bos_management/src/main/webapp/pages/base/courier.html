@@ -47,6 +47,7 @@
 				var rows = $("#grid").datagrid("getSelections");
 				if(rows.length==0) {
 					$.messager.alert("警告","你没有选中要作废的记录！","warning");
+					return;
 				} else {
 					var arrays = new Array();
 					for (var i = 0;i < rows.length; i++) {
@@ -58,7 +59,20 @@
 			}
 			
 			function doRestore(){
-				alert("将取派员还原...");
+				var rows = $("#grid").datagrid('getSelections');
+				var arrays = new Array();
+				if(rows!=0) {
+					for (var i = 0;i<rows.length;i++) {
+						arrays.push(rows[i].id);
+					}
+					
+				} else {
+					$.messager.alert("警告","你没有选中要复原的记录！","warning");
+					return;
+				}
+				var ids  = arrays.join(",");
+				location.href = "../../courier_restoreBatch.action?ids=" + ids;
+				
 			}
 			//工具栏
 			var toolbar = [ {
@@ -274,7 +288,7 @@
 							<td>取派标准</td>
 							<td>
 								<input id="selectAll_standard" type="text" name="standard.id" class="easyui-combobox"
-									   data-options="required:'true',valueField:'id',textField:'name',url:'../../standard_findAll.action'"/>
+									   data-options="required:'true',valueField:'id',textField:'name',url:'../../standard_findAll.action',panelHeight:'auto'"/>
 							</td>
 						</tr>
 						<tr>

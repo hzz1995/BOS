@@ -43,4 +43,20 @@ public interface CustomerDao extends JpaRepository<Customer, Integer>{
 	@Query("update Customer set fixedAreaId = null where fixedAreaId = ?")
 	@Modifying
 	void clearFixedAreaId(String fixedAreaId);
+	
+	/**
+	 * 通过手机号码和密码判断用户是否正确
+	 * @param telephone
+	 * @param password
+	 * @return
+	 */
+	Customer findByTelephoneAndPassword(String telephone,String password);
+
+	/**
+	 * 通过地址得到定区id
+	 * @param address
+	 * @return
+	 */
+	@Query("select fixedAreaId from Customer where address = ?")
+	String findFixedAreaIdByAddress(String address);
 }

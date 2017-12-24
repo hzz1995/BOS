@@ -27,4 +27,9 @@ public interface AreaService {
 	 * @return
 	 */
 	Page<Area> findAll(Specification<Area> specification, Pageable pageable);
+	
+	/**
+	 * 通过省市区查询指定Area
+	 */
+	Area findByProvinceAndCityAndDistrict();
 }

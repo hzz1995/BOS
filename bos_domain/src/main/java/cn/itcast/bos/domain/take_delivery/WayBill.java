@@ -1,7 +1,5 @@
 package cn.itcast.bos.domain.take_delivery;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 
 import cn.itcast.bos.domain.base.Area;
 

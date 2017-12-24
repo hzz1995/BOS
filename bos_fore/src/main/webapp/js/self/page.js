@@ -1,4 +1,5 @@
 bosfore_app.controller("ctrlRead", ['$scope', '$http', function($scope, $http) {
+	
 	$scope.currentPage = 1;
 	$scope.pageSize = 4;
 	$scope.totalCount = 0;
@@ -24,14 +25,14 @@ bosfore_app.controller("ctrlRead", ['$scope', '$http', function($scope, $http) {
 
 		$http({
 			method: 'GET',
-			url: 'data/promotion' + page + '.json',
+			url: 'query_promotion.action',
 			params: {
 				"page": page,
-				"pageSize": $scope.pageSize
+				"rows": $scope.pageSize
 			}
 		}).success(function(data, status, headers, config) {
 			// 显示表格数据 
-			$scope.pageItems = data.pageData;
+			$scope.pageItems = data.listData;
 			// 计算总页数
 			$scope.totalCount = data.totalCount;
 			$scope.totalPages = Math.ceil($scope.totalCount / $scope.pageSize);

@@ -73,12 +73,12 @@ public class CourierAction extends BaseAction<Courier>{
 				List<Predicate> list = new ArrayList<>();
 				//单表查询
 				if(StringUtils.isNotBlank(model.getCourierNum())) {
-					//通过派送员工号去查找  类似与  where id = ?;
+					//通过派送员工号去查找  类似与  where courierNum = ?;
 					Predicate p1 = cb.equal(root.get("courierNum").as(String.class),model.getCourierNum());
 					list.add(p1);
 				}
 				if(model.getStandard()!=null && StringUtils.isBlank(model.getStandard().getName())) {
-					//多表联合查询。 from standard and courier where standard.name like '%?%';
+					//多表联合查询。 from courier,standard where courier.name like '%?%';
 					Join<Object,Object> StandardRoot = root.join("standard",JoinType.INNER);
 					Predicate p2 = cb.like(StandardRoot.get("name").as(String.class),"%" + 
 							model.getStandard().getName() + "%");
@@ -97,6 +97,7 @@ public class CourierAction extends BaseAction<Courier>{
 					list.add(p4);
 				}
 				
+				//1 and 2 and 3 and 4;
 				Predicate predicate = cb.and(list.toArray(new Predicate[0]));
 				return predicate;
 				
@@ -114,7 +115,15 @@ public class CourierAction extends BaseAction<Courier>{
 	@Action(value="courier_delBatch",results= {@Result(name="success",type="redirect",location="./pages/base/courier.html")})
 	public String delBatch() {
 		String[] id = ids.split(",");
-		courierService.updateBatch(id);
+		courierService.updateDelBatch(id);
+		return SUCCESS;
+	}
+	
+	//批量恢复
+	@Action(value="courier_restoreBatch",results= {@Result(name="success",type="redirect",location="./pages/base/courier.html")})
+	public String restoreBatch() {
+		String[] id = ids.split(",");
+		courierService.updateRestoryBatch(id);
 		return SUCCESS;
 	}
 	

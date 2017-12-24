@@ -27,8 +27,22 @@ public interface CourierService {
 	 * @return
 	 */
 	Page<Courier> findByPage(Specification<Courier> specification, Pageable pageable);
-	void updateBatch(String[] id);
-	//查询所有未关联定区的快递员
+	
+	/**
+	 * 批量作废数据
+	 * @param id
+	 */
+	void updateDelBatch(String[] id);
+	/**
+	 * 查询所有未关联定区的快递员
+	 * @return
+	 */
 	List<Courier> findnoassociation();
+	
+	/**
+	 * 批量复原数据
+	 * @param id
+	 */
+	void updateRestoryBatch(String[] id);
 	
 }

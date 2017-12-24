@@ -40,10 +40,17 @@ public class CourierServiceImpl implements CourierService {
 	}
 
 	@Override
-	public void updateBatch(String[] id) {
+	public void updateDelBatch(String[] id) {
 		for (String string : id) {
 			Integer id_a = Integer.parseInt(string);
 			courierDao.updateDel(id_a);
+		}
+	}
+	@Override
+	public void updateRestoryBatch(String[] id) {
+		for (String string : id) {
+			Integer id_a = Integer.parseInt(string);
+			courierDao.updateRestore(id_a);
 		}
 	}
 
@@ -59,5 +66,7 @@ public class CourierServiceImpl implements CourierService {
 		List<Courier> list = courierDao.findAll(specification);
 		return list;
 	}
+
+
 	
 }

@@ -48,7 +48,11 @@ public class FixedArea {
 	private Set<SubArea> subareas = new HashSet<SubArea>(0);  //分区
 
 	@ManyToMany
-	@JoinTable(name = "T_FIXEDAREA_COURIER", joinColumns = { @JoinColumn(name = "C_FIXED_AREA_ID", referencedColumnName = "C_ID") }, inverseJoinColumns = { @JoinColumn(name = "C_COURIER_ID", referencedColumnName = "C_ID") })
+	@JoinTable(name = "T_FIXEDAREA_COURIER", 
+			joinColumns = {	@JoinColumn(name = "C_FIXED_AREA_ID", 
+										referencedColumnName = "C_ID") }, 
+			inverseJoinColumns = { @JoinColumn(name = "C_COURIER_ID", 
+											   referencedColumnName = "C_ID") })
 	private Set<Courier> couriers = new HashSet<Courier>(0);   //快递员
 
 	public String getId() {

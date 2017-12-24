@@ -46,8 +46,17 @@ public class CustomerServiceImpl implements CustomerService {
 			Integer id = Integer.parseInt(idStr);
 			customerDao.updateFixedAreaId(fixedAreaId, id);
 		}
-		
+	}
+	
+	@Override
+	public Customer customerLogin(String telephone, String password) {
+		return customerDao.findByTelephoneAndPassword(telephone, password);
+	}
 
+	@Override
+	public String findFixedAreaIdByAddress(String address) {
+		
+		return customerDao.findFixedAreaIdByAddress(address);
 	}
 
 }

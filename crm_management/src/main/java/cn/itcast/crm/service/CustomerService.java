@@ -2,6 +2,7 @@ package cn.itcast.crm.service;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -23,7 +24,6 @@ public interface CustomerService {
 
 	/**
 	 * 查询未关联客户列表
-	 * 
 	 * @return List<Customer>
 	 */
 	@Path("/noassociationcustomers")
@@ -33,7 +33,6 @@ public interface CustomerService {
 
 	/**
 	 * 查询已经关联客户列表
-	 * 
 	 * @return
 	 */
 	@Path("/associationfixedareacustomers/{fixedareaid}")
@@ -51,4 +50,27 @@ public interface CustomerService {
 	public void associationCustomersToFixedArea(
 			@QueryParam("customerIds") String customerIdStr,
 			@QueryParam("fixedAreaId") String fixedAreaId);
+	
+	
+	/**
+	 * 通过电话号码和密码判断用户名是否正确
+	 * @param telephone
+	 * @param password
+	 * @return
+	 */
+	@Path("findCustomer/customerLogin")
+	@GET
+	@Produces({ "application/xml", "application/json" })
+	Customer customerLogin(@QueryParam("telephone") String telephone,
+			@QueryParam("password") String password);
+	
+	/**
+	 * 通过地址完全匹配定区id
+	 * @param address
+	 * @return
+	 */
+	@Path("findCustomer/findFixedAreaIdByAddress")
+	@GET
+	String findFixedAreaIdByAddress(@QueryParam("address") String address);
 }
+

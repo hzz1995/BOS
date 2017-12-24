@@ -25,9 +25,10 @@ import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Controller;
 
+import cn.itcast.bos.domain.base.Contants;
+import cn.itcast.crm.domain.Customer;
 import com.opensymphony.xwork2.ActionContext;
 
-import cn.itcast.crm.domain.Customer;
 import cn.itcast.fore.utils.MailUtils;
 
 @ParentPackage("json-default")
@@ -62,6 +63,10 @@ public class CustomerAction extends BaseAction<Customer>{
 	@Qualifier("jmsQueueTemplate")
 	private JmsTemplate jmsTemplate;
 	
+	/**
+	 * 通过客户输入的注册消息，发送到消息队列进行发送消息的功能
+	 * @return
+	 */
 	@Action(value="customer_sendSms")
 	public String sendSms() {	
 		String code = RandomStringUtils.randomNumeric(4);
@@ -69,8 +74,10 @@ public class CustomerAction extends BaseAction<Customer>{
 		//将随机生成的验证码保存到session中
 		ActionContext.getContext().getSession().put("checkedcode", code);
 		final String msg = "尊敬的用户您好,本次获得的验证码为："+code + ",服务电话：4006184000";
-		jmsTemplate.send("bos_sms", new MessageCreator() {
 		
+		//消息队列模板对象。
+		jmsTemplate.send("bos_sms", new MessageCreator() {
+
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 					MapMessage mapMessage = session.createMapMessage();
@@ -139,5 +146,26 @@ public class CustomerAction extends BaseAction<Customer>{
 		//最后删除激活码
 		redisTemplate.delete(model.getTelephone());
 		return NONE;
+	}
+	
+	/**
+	 * 客户登录
+	 * @return
+	 */
+	@Action(value="customer_login",results= {
+			@Result(name="success",type="redirect",location="/#/myhome"),
+			@Result(name="login",type="redirect",location="login.jsp")})
+	public String customerLogin() {
+		Customer customer = WebClient.create("http://localhost:9998/crm_management/services/customerService/findCustomer/"
+				+ "customerLogin?telephone=" + model.getTelephone() + "&password=" + model.getPassword())
+				.accept(MediaType.APPLICATION_JSON).get(Customer.class);
+		
+		if(customer ==null) {
+			System.out.println("用户名不正确");
+			return LOGIN;
+		} else {
+			ServletActionContext.getRequest().getSession().setAttribute("customer", customer);
+			return SUCCESS;
+		}
 	}
 }

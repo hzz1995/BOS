@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import cn.itcast.bos.domain.base.Area;
 import cn.itcast.bos.domain.base.Courier;
@@ -22,6 +23,7 @@ import cn.itcast.bos.domain.base.Courier;
  */
 @Entity
 @Table(name = "T_ORDER")
+@XmlRootElement(name = "order")
 public class Order {
 	@Id
 	@GeneratedValue
@@ -35,16 +37,18 @@ public class Order {
 
 	@Column(name = "C_CUSTOMER_ID")
 	private Integer customer_id; // 客户编号
-
+	
 	@Column(name = "C_SEND_NAME")
 	private String sendName; // 寄件人姓名
 	@Column(name = "C_SEND_MOBILE")
 	private String sendMobile;// 寄件人电话
 	@Column(name = "C_SEND_COMPANY")
 	private String sendCompany;// 寄件人公司
+	
 	@OneToOne
 	@JoinColumn(name = "C_SEND_AREA_ID")
 	private Area sendArea; // 寄件人省市区信息
+	
 	@Column(name = "C_SEND_ADDRESS")
 	private String sendAddress;// 寄件人详细地址信息
 
@@ -54,9 +58,11 @@ public class Order {
 	private String recMobile;// 收件人电话
 	@Column(name = "C_REC_COMPANY")
 	private String recCompany;// 收件人公司
+	
 	@OneToOne
 	@JoinColumn(name = "C_REC_AREA_ID")
 	private Area recArea; // 收件人省市区信息
+	
 	@Column(name = "C_REC_ADDRESS")
 	private String recAddress;// 收件人详细地址信息
 

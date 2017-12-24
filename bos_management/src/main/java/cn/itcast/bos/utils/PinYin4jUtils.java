@@ -2,8 +2,6 @@ package cn.itcast.bos.utils;
 
 import java.util.Arrays;
 
-import org.hibernate.engine.transaction.jta.platform.internal.SynchronizationRegistryBasedSynchronizationStrategy;
-
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -116,6 +114,7 @@ public class PinYin4jUtils {
 	 * @param separator
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public static String hanziToPinyin(String hanzi, String separator) {
 
 		// 创建汉语拼音处理类

@@ -45,7 +45,7 @@ public class Promotion implements Serializable {
 	@Column(name = "C_UPDATE_USER")
 	private String updateUser;// 更新人 后续与后台用户关联
 	@Column(name = "C_STATUS")
-	private String status = "1"; // 状态 可取值：1.进行中 2. 已结束
+	private String status = "1"; // 状态 可取值：1.进行中  2. 已结束
 	@Column(name = "C_DESCRIPTION")
 	private String description; // 宣传内容(活动描述信息)
 

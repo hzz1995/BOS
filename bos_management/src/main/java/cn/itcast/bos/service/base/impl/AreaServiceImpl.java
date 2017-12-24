@@ -28,5 +28,10 @@ public class AreaServiceImpl implements AreaService {
 		Page<Area> list = areaDao.findAll(specification, pageable);
 		return list;
 	}
+	@Override
+	public Area findByProvinceAndCityAndDistrict() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
